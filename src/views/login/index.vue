@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="div-father">
     <van-cell-group>
       <van-field
         left-icon="contact"
@@ -20,14 +20,16 @@
       />
     </van-cell-group>
     <div class="login">
-      <van-button type="info" @click="loginLand">主要按钮</van-button>
+      <van-button type="info" @click="loginLand">登陆</van-button>
     </div>
-
+    <div class="bottom">
+      <a href="javascript:;">隐私条款</a>
+    </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import { login } from '@/api/user'
 export default {
   name: 'Login',
   data () {
@@ -40,28 +42,37 @@ export default {
   },
   methods: {
     async loginLand () {
-      try {
-        await axios({
-          method: 'POST',
-          url: 'http://toutiao.course.itcast.cn/app/v1_0/authorizations',
-          data: this.user
-        })
-        this.$toast('登陆成功')
-        this.$router.push({ name: 'home' })
-      } catch (err) {
-        console.log(err)
-      }
+      // try {
+      const data = await login(this.user)
+      console.log(data)
+      this.$toast('登陆成功')
+      this.$router.push({ name: 'home' })
+      // } catch (err) {
+      //   console.log(err)
+      // }
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-.login {
-  padding: 20px 10px;
+.div-father {
+  .login {
+    padding: 20px 10px;
 
-  .van-button {
-    width: 100%;
+    .van-button {
+      width: 100%;
+    }
+  }
+  .bottom {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 22px;
+    a {
+      color: #3296fa;
+    }
   }
 }
 </style>
