@@ -7,6 +7,12 @@ import 'vant/lib/index.css'
 import 'amfe-flexible'
 import '@/styles/base.css'
 import '@/styles/index.less'
+// import VeeValidate from 'vee-validate'
+import zhCn from 'vee-validate/dist/locale/zh_CN'
+import VeeValidate, { Validator } from 'vee-validate'
+
+Vue.use(VeeValidate)
+Validator.localize('zh_CN', zhCn)
 
 Vue.use(Vant)
 Vue.config.productionTip = false

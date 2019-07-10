@@ -1,3 +1,7 @@
+/*
+* 登陆模块
+* */
+
 import request from '@/utils/request'
 
 export const login = ({ mobile, code }) => {

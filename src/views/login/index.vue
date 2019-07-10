@@ -1,5 +1,9 @@
 <template>
   <div class="div-father">
+    <van-nav-bar
+      title="登陆"
+      left-arrow
+    />
     <van-cell-group>
       <van-field
         left-icon="contact"
@@ -9,6 +13,10 @@
         right-icon="question-o"
         placeholder="请输入用户名"
         @click-right-icon="$toast('question')"
+        v-validate="'required'"
+        type="text"
+        name="用户名"
+        :error-message ="errors.first('用户名')"
       />
 
       <van-field
@@ -17,10 +25,13 @@
         type="password"
         label="密码"
         placeholder="请输入密码"
+        v-validate="'required'"
+        name="密码"
+        :error-message ="errors.first('密码')"
       />
     </van-cell-group>
     <div class="login">
-      <van-button type="info" @click="loginLand">登陆</van-button>
+      <van-button type="info" :loading="loading" loading-text="加载中..." @click="loginLand">登陆</van-button>
     </div>
     <div class="bottom">
       <a href="javascript:;">隐私条款</a>
@@ -30,6 +41,8 @@
 
 <script>
 import { login } from '@/api/user'
+import { setUser } from '../../utils/auth'
+
 export default {
   name: 'Login',
   data () {
@@ -37,19 +50,31 @@ export default {
       user: {
         mobile: '15128488941',
         code: '123456'
-      }
+      },
+      loading: false
     }
   },
   methods: {
+    // 登陆功能
     async loginLand () {
-      // try {
-      const data = await login(this.user)
-      console.log(data)
-      this.$toast('登陆成功')
-      this.$router.push({ name: 'home' })
-      // } catch (err) {
-      //   console.log(err)
-      // }
+      this.loading = true
+      const res = await this.$validator.validate()
+      if (!res) {
+        this.loading = false
+        this.$toast('请正确填写格式哦！')
+        return
+      }
+      try {
+        const data = await login(this.user)
+        setUser(data)
+        this.loading = false
+        this.$toast('登陆成功')
+        this.$router.push({ name: 'home' })
+      } catch (err) {
+        this.$toast('登陆失败！')
+        this.loading = false
+        console.log(err)
+      }
     }
   }
 }
