@@ -41,7 +41,7 @@
 
 <script>
 import { login } from '@/api/user'
-import { setUser } from '../../utils/auth'
+// import { setUser } from '../../utils/auth'
 
 export default {
   name: 'Login',
@@ -49,7 +49,8 @@ export default {
     return {
       user: {
         mobile: '15128488941',
-        code: '123456'
+        // code: '123456'
+        code: '246810'
       },
       loading: false
     }
@@ -66,7 +67,7 @@ export default {
       }
       try {
         const data = await login(this.user)
-        setUser(data)
+        this.$store.commit('setUser', data)
         this.loading = false
         this.$toast('登陆成功')
         this.$router.push({ name: 'home' })
