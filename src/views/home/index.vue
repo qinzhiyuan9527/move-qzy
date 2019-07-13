@@ -6,7 +6,13 @@
       fixed
     />
 
-    <van-tabs class="channel-tabs"  v-model="channel_id">
+    <van-tabs class="channel-tabs" v-model="channel_id">
+      <span
+        slot="nav-right"
+        style="position: fixed; right: 0px;background: #fff; box-sizing: border-box"
+      >
+        <van-icon name="wap-nav" @click="ischannel = true" />
+      </span>
       <van-tab v-for="item in channels" :title="item.name" :key="item.id">
         <van-pull-refresh
           v-model="item.DropDownLoading"
@@ -29,18 +35,30 @@
         </van-pull-refresh>
       </van-tab>
     </van-tabs>
+
+<!--    频道编辑-->
+    <homeChannel
+      v-model="ischannel"
+      :channel="channels"
+      :channel_id="channel_id"
+    />
   </div>
 </template>
 
 <script>
 import { channelList, NewsRecommendation } from '@/api/channelList'
+import homeChannel from './components/channel'
 export default {
   name: 'Home',
+  components: {
+    homeChannel
+  },
   data () {
     return {
       // 频道id
       channel_id: 0,
-      channels: [] // 频道列表
+      channels: [], // 频道列表
+      ischannel: false
     }
   },
   computed: {
@@ -159,6 +177,12 @@ export default {
   }
   .channel-tabs /deep/ .van-tabs__content {
     margin-top: 100px;
+  }
+  .channel-tabs /deep/ .van-icon, .van-icon::before {
+    font-size: 52px;
+    line-height: 88px;
+    color: #20a0ff;
+    box-sizing: border-box
   }
   .van-tabs {
     margin-bottom: 100px;
