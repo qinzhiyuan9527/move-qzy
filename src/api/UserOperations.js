@@ -1,13 +1,13 @@
 /**
- * 文章相关接口
+ * 用户操作相关
  */
-
-// 对文章不喜欢
 import request from '@/utils/request'
-export const DislikeArticles = (targetId) => {
+
+// 拉黑用户
+export const BlackoutUsers = (targetId) => {
   return request({
     method: 'POST',
-    url: '/app/v1_0/article/dislikes',
+    url: '/app/v1_0/user/blacklists',
     data: {
       target: targetId
     }

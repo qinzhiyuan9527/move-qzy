@@ -48,7 +48,7 @@
 <!--                  relativeTime 是过滤器-->
                   <span>{{articlesItem.pubdate | relativeTime}}</span>
                   &nbsp;
-                  <van-icon class="close" name="close" @click="isMoreActionShow = true" />
+                  <van-icon class="close" name="close" @click="JumpComplaint(articlesItem)" />
                 </p>
               </div>
             </van-cell>
@@ -65,7 +65,12 @@
     />
 <!--    /频道编辑-->
 <!--    投诉列表-->
-    <home-complaint v-model="isMoreActionShow" />
+    <home-complaint
+      v-model="isMoreActionShow"
+      :JumpComplaintData="JumpComplaintData"
+      @dislike="removeDislikes"
+      @BlackoutUsers="BlackoutUsersData"
+    />
 <!--    /投诉列表-->
   </div>
 </template>
@@ -86,7 +91,8 @@ export default {
       channel_id: 0,
       channels: [], // 频道列表
       ischannel: false,
-      isMoreActionShow: true // 投诉控制
+      isMoreActionShow: false, // 投诉状态控制
+      JumpComplaintData: null // 不喜欢/拉黑文章
     }
   },
   computed: {
@@ -192,6 +198,23 @@ export default {
         withTop: 1
       })
       return data
+    },
+    // 投诉功能跳转
+    JumpComplaint (value) {
+      this.isMoreActionShow = true
+      this.JumpComplaintData = value
+    },
+    // 移除不喜欢
+    removeDislikes () {
+      const articles = this.activeChannel.articles
+      const id = articles.findIndex(item => item === this.JumpComplaintData)
+      articles.splice(id, 1)
+    },
+    // 拉黑用户
+    async BlackoutUsersData () {
+      const articles = this.activeChannel.articles
+      const id = articles.findIndex(item => item === this.JumpComplaintData)
+      articles.splice(id, 1)
     }
   }
 }
