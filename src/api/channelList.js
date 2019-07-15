@@ -31,3 +31,22 @@ export const UserChannelList = () => {
     url: '/app/v1_0/channels'
   })
 }
+
+// 批量修改用户频道列表（重置式）
+export const ModifyUserChannel = channels => {
+  return request({
+    method: 'PUT',
+    url: '/app/v1_0/user/channels',
+    data: {
+      channels
+    }
+  })
+}
+
+// 批量删除用户频道列表
+export const DeleteUserChannels = targetId => {
+  return request({
+    method: 'DELETE',
+    url: `/app/v1_0/user/channels/${targetId}`
+  })
+}

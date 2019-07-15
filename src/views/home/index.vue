@@ -11,7 +11,7 @@
         slot="nav-right"
         style="position: fixed; right: 0px;background: #fff; box-sizing: border-box"
       >
-        <van-icon name="wap-nav" @click="ischannel = true" />
+        <van-icon class="channel-tabs-icon" name="wap-nav" @click="ischannel = true" />
       </span>
       <van-tab v-for="item in channels" :title="item.name" :key="item.id">
         <van-pull-refresh
@@ -30,7 +30,28 @@
               v-for="articlesItem in item.articles"
               :key="articlesItem.aut_id"
               :title="articlesItem.title"
-            />
+              right-icon
+            >
+              <div slot="label">
+                <template v-if="articlesItem.cover.type">
+                  <van-grid :border="false">
+                    <van-grid-item v-for="(img, index) in  articlesItem.cover.images" :key="index">
+                      <van-image :src="img" fit="contain" lazy-load />
+                    </van-grid-item>
+                  </van-grid>
+                </template>
+                <p>
+                  <span>{{articlesItem.aut_name}}</span>
+                  &nbsp;
+                  <span>{{articlesItem.comm_count}}评论</span>
+                  &nbsp;
+<!--                  relativeTime 是过滤器-->
+                  <span>{{articlesItem.pubdate | relativeTime}}</span>
+                  &nbsp;
+                  <van-icon class="close" name="close" @click="isMoreActionShow = true" />
+                </p>
+              </div>
+            </van-cell>
           </van-list>
         </van-pull-refresh>
       </van-tab>
@@ -40,25 +61,32 @@
     <homeChannel
       v-model="ischannel"
       :channel="channels"
-      :channel_id="channel_id"
+      :channel_id.sync="channel_id"
     />
+<!--    /频道编辑-->
+<!--    投诉列表-->
+    <home-complaint v-model="isMoreActionShow" />
+<!--    /投诉列表-->
   </div>
 </template>
 
 <script>
 import { channelList, NewsRecommendation } from '@/api/channelList'
 import homeChannel from './components/channel'
+import homeComplaint from './components/Complaint'
 export default {
   name: 'Home',
   components: {
-    homeChannel
+    homeChannel,
+    homeComplaint
   },
   data () {
     return {
       // 频道id
       channel_id: 0,
       channels: [], // 频道列表
-      ischannel: false
+      ischannel: false,
+      isMoreActionShow: true // 投诉控制
     }
   },
   computed: {
@@ -178,11 +206,15 @@ export default {
   .channel-tabs /deep/ .van-tabs__content {
     margin-top: 100px;
   }
-  .channel-tabs /deep/ .van-icon, .van-icon::before {
+  .channel-tabs /deep/ .channel-tabs-icon {
     font-size: 52px;
     line-height: 88px;
     color: #20a0ff;
     box-sizing: border-box
+  }
+  .channel-tabs .close {
+    float: right;
+    font-size: 30px;
   }
   .van-tabs {
     margin-bottom: 100px;
