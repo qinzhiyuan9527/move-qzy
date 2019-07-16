@@ -13,3 +13,16 @@ export const BlackoutUsers = (targetId) => {
     }
   })
 }
+
+// 举报文章
+export const ReportingArticles = ({ label, value, remark }) => {
+  return request({
+    method: 'POST',
+    url: '/app/v1_0/article/reports',
+    data: {
+      target: label,
+      type: value,
+      remark
+    }
+  })
+}

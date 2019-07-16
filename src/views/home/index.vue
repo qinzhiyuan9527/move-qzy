@@ -101,6 +101,11 @@ export default {
      */
     activeChannel () {
       return this.channels[this.channel_id]
+    },
+    // 移除当前文章
+    Removearticles () {
+      const articles = this.activeChannel.articles
+      return articles.findIndex(item => item === this.JumpComplaintData)
     }
   },
   watch: {
@@ -206,15 +211,13 @@ export default {
     },
     // 移除不喜欢
     removeDislikes () {
-      const articles = this.activeChannel.articles
-      const id = articles.findIndex(item => item === this.JumpComplaintData)
-      articles.splice(id, 1)
+      const id = this.Removearticles
+      this.activeChannel.articles.splice(id, 1)
     },
     // 拉黑用户
     async BlackoutUsersData () {
-      const articles = this.activeChannel.articles
-      const id = articles.findIndex(item => item === this.JumpComplaintData)
-      articles.splice(id, 1)
+      const id = this.Removearticles
+      this.activeChannel.articles.splice(id, 1)
     }
   }
 }
